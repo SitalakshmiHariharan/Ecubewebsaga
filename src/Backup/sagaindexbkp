@@ -1,0 +1,75 @@
+import axios from 'axios';
+import { put, takeLatest, all } from 'redux-saga/effects';
+
+function* sliderData(){
+    console.log("It has reached the sliderData in saga")
+    try{
+        const data = yield axios.get(`http://localhost:6700/movies`)
+            .then(response => response.data)
+
+        yield put ({type:'SLIDER_DATA', json:data})
+    }
+    catch(error){
+        console.log("There was an error", error)
+    }
+}
+
+/*function* sliderData(){
+    console.log("It has reached the sliderData in saga")
+    const json = yield fetch('http://localhost:6700/movies')
+        .then(response => response.json());
+
+    yield put({type:'SLIDER_DATA', json:json})
+}
+
+function* recomMovies(){
+    console.log("Inside the Recommended Movies saga")
+    const json = yield fetch('http://localhost:6700/recommended')
+        .then(response => response.json());    
+
+    yield put({type:'RECOM_MOVIES',json:json})
+}
+
+function* latestMovies(){
+    console.log("Inside the Latest Movies saga")
+    const json = yield fetch('http://localhost:6700/latest')
+        .then(response => response.json());    
+
+    yield put({type:'LATEST_MOVIES',json:json})
+}
+
+function* upcomingMovies(){
+    console.log("Inside the Upcoming Movies saga")
+    const json = yield fetch('http://localhost:6700/upcomingMovies')
+        .then(response => response.json());    
+
+    yield put({type:'UPCOMING_MOVIES',json:json})
+}
+
+function* nearbyEvents(){
+    console.log("Inside the Nearby Events action")
+    const json = yield fetch('http://localhost:6700/events')
+    .then(response => response.json())    
+
+    yield put({type:'NEARBY_EVENTS',json: json})    
+}
+*/
+  
+function* actionWatcher (){
+    console.log("Inside the actionwatcher")
+    yield takeLatest('GET_SLIDER_DATA', sliderData )
+    //yield takeLatest('GET_RECOM_MOVIES', recomMovies )
+    //yield takeLatest('GET_LATEST_MOVIES', latestMovies )
+    //yield takeLatest('GET_UPCOMING_MOVIES', upcomingMovies )
+    //yield takeLatest('GET_NEARBY_EVENTS', nearbyEvents )
+}
+
+export default function* rootSaga(){
+    console.log("Inside the rootsaga")
+    yield all([
+        actionWatcher(),
+    ]);
+}
+
+
+
